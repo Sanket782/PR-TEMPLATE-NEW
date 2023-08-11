@@ -35,5 +35,8 @@ Add any extra information that may be relevant for reviewers.
 
 **Screenshots:**
 Insert any relevant screenshots or GIFs here to showcase the changes visually.
+<<<<<<< HEAD
 
+=======
+>>>>>>> f6dfc429f4ea94c1b6d55b464d6eba6f45d000d1
 
