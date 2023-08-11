@@ -13,4 +13,10 @@ inputs:
   default:
     description: "The template to use when a branch name matches no patterns."
     required: false
-
+runs:
+  using: "composite"
+  steps: 
+    - name: Echo
+      shell: bash
+      run: |
+        echo Heyyyyy
