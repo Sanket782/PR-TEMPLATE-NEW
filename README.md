@@ -46,4 +46,4 @@ Here's what a PR checklist template could look like (`feature.md`):
 - [ ] do I need to optimize DB/Cache performance?
 - [ ] do I need specific QA?
 ```
-ok ok 
+ok ok ok ok
