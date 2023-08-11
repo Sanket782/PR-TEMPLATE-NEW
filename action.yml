@@ -13,9 +13,4 @@ inputs:
   default:
     description: "The template to use when a branch name matches no patterns."
     required: false
-runs:
-  using: 'node16'
-  main: 'dist/index.js'
-branding:
-  icon: "check-circle"
-  color: "purple"
+
