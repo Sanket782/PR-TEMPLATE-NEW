@@ -8,12 +8,27 @@ on:
 jobs:
   display_template:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-
-      - name: Read PR template
-        id: read-template
+      
+      - name: Read PR Template
+        id: read_template
         run: |
-          echo "::set-output name=template::$(cat .github/PULL_REQUEST_TEMPLATE/prtemplate.md)"
+          template_file=".github/PULL_REQUEST_TEMPLATE/prtemplate.md"
+          template_content=$(cat "$template_file")
+          echo "::set-output name=template::$template_content"
+      
+      - name: Set PR Description
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const template = `<!-- PR Template -->\n${{ steps.read_template.outputs.template }}`;
+            github.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              body: template
+            });
