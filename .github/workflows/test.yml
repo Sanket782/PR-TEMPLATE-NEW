@@ -1,24 +1,34 @@
-name: "Tests"
+name: Include PR Template
 
-on: [pull_request]
+on:
+  pull_request:
+    types:
+      - opened
 
 jobs:
-  # unit tests
-  units:
+  include-template:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - run: npm ci
-      - run: npm test
 
-  # ok test action works running from the graph
-  test:
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: ./
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          template_dir: '.github/PULL_REQUEST_TEMPLATE/'
-          mapping: 'feature=feature/,feat/;bugfix=fix/,bugfix/'
-          default: 'feature'
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get PR Template
+        run: |
+          template=$(cat .github/PULL_REQUEST_TEMPLATE/prtemplate.md)
+          echo "## Pull Request Template\n$template" > pr_template.md
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Update PR Description
+        run: |
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          PULL_NUMBER=$(jq --raw-output .number "$GITHUB_EVENT_PATH")
+          TEMPLATE_CONTENT=$(cat pr_template.md)
+          API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PULL_NUMBER}"
+
+          curl -X PATCH "$API_URL" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{\"body\": \"$TEMPLATE_CONTENT\"}"
