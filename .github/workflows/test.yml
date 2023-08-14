@@ -16,7 +16,7 @@ jobs:
       - name: Get PR Template
         run: |
           template=$(cat .github/PULL_REQUEST_TEMPLATE/prtemplate.md)
-          echo "## Pull Request Template\n$template" > pr_template.md
+          echo "## Pull Request Template\n$template" > prtemplate.md
 
       - name: Update PR Description
         uses: actions/github-script@v5
@@ -24,7 +24,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const template = fs.readFileSync('pr_template.md', 'utf8');
+            const template = fs.readFileSync('prtemplate.md', 'utf8');
             github.pulls.update({
               pull_number: context.issue.number,
               owner: context.repo.owner,
