@@ -1,6 +1,6 @@
 ## Pull Request
 
-**Description:**
+## Description:
 Briefly describe the purpose and goals of this pull request.
 
 **Related Issue(s):**
