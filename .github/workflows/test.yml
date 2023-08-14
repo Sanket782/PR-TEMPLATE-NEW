@@ -1,4 +1,4 @@
-name: Display PR Template
+name: Include PR Template
 
 on:
   pull_request:
@@ -6,29 +6,28 @@ on:
       - opened
 
 jobs:
-  display_template:
+  include-template:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v2
-      
-      - name: Read PR Template
-        id: read_template
+
+      - name: Get PR Template
         run: |
-          template_file=".github/PULL_REQUEST_TEMPLATE/prtemplate.md"
-          template_content=$(cat "$template_file")
-          echo "::set-output name=template::$template_content"
-      
-      - name: Set PR Description
-        uses: actions/github-script@v4
+          template=$(cat .github/PULL_REQUEST_TEMPLATE/prtemplate.md)
+          echo "## Pull Request Template\n$template" > pr_template.md
+
+      - name: Update PR Description
+        uses: actions/github-script@v5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const template = `<!-- PR Template -->\n${{ steps.read_template.outputs.template }}`;
+            const fs = require('fs');
+            const template = fs.readFileSync('pr_template.md', 'utf8');
             github.pulls.update({
+              pull_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: context.issue.number,
               body: template
-            });
+            })
