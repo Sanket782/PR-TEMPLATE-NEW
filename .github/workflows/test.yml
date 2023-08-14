@@ -16,18 +16,19 @@ jobs:
       - name: Get PR Template
         run: |
           template=$(cat .github/PULL_REQUEST_TEMPLATE/prtemplate.md)
-          echo "## Pull Request Template\n$template" > prtemplate.md
+          echo "## Pull Request Template\n$template" > pr_template.md
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Update PR Description
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const template = fs.readFileSync('prtemplate.md', 'utf8');
-            github.pulls.update({
-              pull_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: template
-            })
+        run: |
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          PULL_NUMBER=$(jq --raw-output .number "$GITHUB_EVENT_PATH")
+          TEMPLATE_CONTENT=$(cat pr_template.md)
+          API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PULL_NUMBER}"
+
+          curl -X PATCH "$API_URL" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{\"body\": \"$TEMPLATE_CONTENT\"}"
