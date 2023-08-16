@@ -4,13 +4,9 @@ Briefly describe the purpose and goals of this pull request.
 
 **Related Issue(s):**
 - #IssueNumber (replace with the actual issue number)
-- ...
 
 **Changes:**
 Summarize the changes made in this pull request.
-
-**Screenshots / GIFs:**
-If applicable, provide visual aids to help reviewers understand the changes.
 
 **Checklist:**
 - [ ] I have read and followed the [Contributing Guidelines](link-to-contributing-guidelines)
@@ -31,10 +27,3 @@ If applicable, provide visual aids to help reviewers understand the changes.
 
 **Additional Notes:**
 Add any extra information that may be relevant for reviewers.
-
-**Screenshots:**
-Insert any relevant screenshots or GIFs here to showcase the changes visually.
-<<<<<<< HEAD
-
-=======
->>>>>>> f6dfc429f4ea94c1b6d55b464d6eba6f45d000d1
